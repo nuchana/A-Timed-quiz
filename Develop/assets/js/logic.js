@@ -11,6 +11,7 @@ var submitBtn = document.getElementById("submit");
 var startBtn = document.getElementById("start");
 var initialsEl = document.getElementById("initials");
 var feedbackEl = document.getElementById("feedback");
+var startScreen = document.getElementById("start-screen")
 
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
@@ -19,13 +20,13 @@ var sfxWrong = new Audio("assets/sfx/incorrect.wav");
 startBtn.addEventListener("click",startQuiz);
 function startQuiz() {
   // hide start screen
-  start.style.display = "none";
+  startScreen.style.display = "none";
   // un-hide questions section
-  questions.style.display = "block";
+  questionsEl.removeAttribute("class");
   // start timer
-  timer = questions.length * 15;
+  time = questions.length * 15;
   // show starting time
-  timerRender ();
+  //getTime ();
 
   getQuestion();
 }
