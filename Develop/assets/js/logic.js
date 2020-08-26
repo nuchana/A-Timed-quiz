@@ -12,24 +12,28 @@ var startBtn = document.getElementById("start");
 var initialsEl = document.getElementById("initials");
 var feedbackEl = document.getElementById("feedback");
 var startScreen = document.getElementById("start-screen")
+var secondsLeft = 75
 
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
 var sfxWrong = new Audio("assets/sfx/incorrect.wav");
 
 startBtn.addEventListener("click",startQuiz);
+
 function startQuiz() {
   // hide start screen
   startScreen.style.display = "none";
   // un-hide questions section
   questionsEl.removeAttribute("class");
   // start timer
-  time = questions.length * 15;
+  timerEl.textContent = secondsLeft;
+ 
   // show starting time
-  //getTime ();
+  getTime ();
 
   getQuestion();
 }
+
 
 function getQuestion() {
   // get current question object from array
@@ -39,34 +43,17 @@ function getQuestion() {
       choices: ["strings", "booleans", "alerts", "numbers"],
       answer: "alerts",
 
-
     },
-    {
-      title: "The condition in an if / else statement is enclosed within ____.",
-      choices: ["quotes", "curly brackets", "parentheses", "square brackets"],
-      answer: "parentheses",
-    },
-    {
-      title: "Arrays in JavaScript can be used to store ____.",
-      choices: [
-        "numbers and strings",
-        "other arrays",
-        "booleans",
-        "all of the above"],
-      answer: "all of the above",
-    },
-    {
-      title: "String values must be enclosed within ____ when being assigned to variables.",
-      choices: ["commas", "curly brackets", "quotes", "parentheses"],
-      answer: "quotes",
-    },
-    {
-      title: "A very useful tool used during development and debugging for printing content to the debugger is:",
-      choices: ["JavaScript", "terminal / bash", "for loops", "console.log"],
-      answer: "console.log",
-    },
+    
   ]
+  var lastQuestion = questionsEl.length - 1;
+  let runningQuestion = 0;
 
+  function renderQuestion(){
+    let q = questions[runningQuestion];
+    question.innerHTML = "<p>"+ q.question + "</p>";
+
+  }
   // update title with current question
 
   // clear out any old question choices
