@@ -18,42 +18,56 @@ var secondsLeft = 75
 var sfxRight = new Audio("assets/sfx/correct.wav");
 var sfxWrong = new Audio("assets/sfx/incorrect.wav");
 
-startBtn.addEventListener("click",startQuiz);
+startBtn.addEventListener("click", startQuiz);
 
 function startQuiz() {
   // hide start screen
   startScreen.style.display = "none";
   // un-hide questions section
-  questionsEl.removeAttribute("class");
+  questions.classlist.remove("hide");
   // start timer
-  timerEl.textContent = secondsLeft;
- 
-  // show starting time
-  getTime ();
+  createTimer();
 
+  // show starting time
+  displayTime();
+  
   getQuestion();
 }
 
+// make a timer
+function setTimer() {
+  var gameTimer = setInterval(function(){
+    secondsLeft--;
+    time.textContent = secondsLeft;
+    if (secondsLeft === 0){
+      clearInterval(gameTimer);
+      sendMessage ("Time's up!");
+    }
+  },1000);
+
+}
+
+
+
 
 function getQuestion() {
-  // get current question object from array
-  let questions = [
-    {
-      title: "Commonly used data types DO NOT include:",
-      choices: ["strings", "booleans", "alerts", "numbers"],
-      answer: "alerts",
+// get current question object from array
+let questions = [
+  {
+    title: "Commonly used data types DO NOT include:",
+    choices: ["strings", "booleans", "alerts", "numbers"],
+    answer: "alerts",
 
-    },
-    
-  ]
-  var lastQuestion = questionsEl.length - 1;
-  let runningQuestion = 0;
+  },
+  
+]
+var lastQuestion = questionsEl.length - 1;
+let runningQuestion = 0;
 
-  function renderQuestion(){
-    let q = questions[runningQuestion];
-    question.innerHTML = "<p>"+ q.question + "</p>";
+}
 
-  }
+
+
   // update title with current question
 
   // clear out any old question choices
@@ -65,21 +79,22 @@ function getQuestion() {
   // attach click event listener to each choice
 
   // display on the page
-}
 
-// create var
-var score = 0
 
 function questionClick() {
 
   // check if user guessed wrong
-  if (questions[runningquestionsEl].correct == answer) {
-    score++;
+  for (var i = 0; i < questionsEl.length; i++) {
+    var response = window.prompt(questionsEl[i].title)
+    if(response==questions[i].answer){
+      score ++;
+      alert ("Correct!");
+    }
+    else {
+      alert ("wrong!");
+    }
+
   }
-  else { }
-
-
-
 
   // penalize time
 
@@ -101,44 +116,44 @@ function questionClick() {
   // getQuestion
 }
 
-function quizEnd() {
-  // stop timer
+  function quizEnd() {
+    // stop timer
 
-  // show end screen
+    // show end screen
 
-  // show final score
+    // show final score
 
-  // hide questions section
-}
+    // hide questions section
+  }
 
-function clockTick() {
-  // update time
+  function clockTick() {
+    // update time
 
-  // check if user ran out of time
-}
+    // check if user ran out of time
+  }
 
-function saveHighscore() {
-  // get value of input box
+  function saveHighscore() {
+    // get value of input box
 
-  // make sure value wasn't empty
-  // get saved scores from localstorage, or if not any, set to empty array
+    // make sure value wasn't empty
+    // get saved scores from localstorage, or if not any, set to empty array
 
-  // format new score object for current user
+    // format new score object for current user
 
-  // save to localstorage
+    // save to localstorage
 
-  // redirect to next page
-}
+    // redirect to next page
+  }
 
-function checkForEnter(event) {
-  // check if event key is enter
-  // saveHighscore
-}
+  function checkForEnter(event) {
+    // check if event key is enter
+    // saveHighscore
+  }
 
-// user clicks button to submit initials
-submitBtn.onclick = saveHighscore;
+  // user clicks button to submit initials
+  submitBtn.onclick = saveHighscore;
 
-// user clicks button to start quiz
-startBtn.onclick = startQuiz;
+  // user clicks button to start quiz
+  startBtn.onclick = startQuiz;
 
-initialsEl.onkeyup = checkForEnter;
+  initialsEl.onkeyup = checkForEnter;
