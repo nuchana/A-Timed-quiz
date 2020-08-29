@@ -66,71 +66,41 @@ function getQuestion() {
   var choice = document.createElement("button");
   choice.textContent = currentQuestion.choices[i];
   // attach click event listener to each choice
-  choice.onlick = checkAnswer;
+  choices.onlick = checkAnswer;
+  // console.log(choice);
   // display on the page
   choicesEl.appendChild(choice);
   }
 }
 
-//display questions & for each question's choices make a button
-// function getQuestion() {
-//   // get current question object from array
-//   var currentQuestion = questions[currentQuestionIndex];
-
-//   // update title with current question
-//   questionTitle.innerHTML = currentQuestion.title;
-
-
-//   // empty containers/ any old question choices
-//   choicesEl.innerHTML = "";
-//   // currentQuestion[i-1].choices.classList.add("hide");
-
-
-//   for (var i = 0; i < currentQuestion.choices.length; i++) {
-//     // create new button for each choice (from instructor)
-//     var newDiv = document.createElement("div");
-//     document.body.appendChild(newDiv);
-//     var newButton = document.createElement("button");
-//     newButton.id = i;
-//     newButton.innerHTML = questions[currentQuestionIndex].choices[i];
-//     newButton.className = "choices button";
-//     // display on the page (from instructor)
-//     document.body.appendChild(newButton);
-//     newButton.onclick = checkAnswer;
-//     // console.log(questions[currentQuestionIndex].answer);
-
-
-//   }
-
-// }
-
 // check if answer is correct
+choicesEl.addEventListener("click", checkAnswer);
 function checkAnswer() {
 
-  if (event.target.innerHTML === questions[currentQuestionIndex].answer) {
+  if (event.target.textContent === questions[currentQuestionIndex].answer) {
 
-    timerId = timerId + 5;
-    console.log(timerId)
+    // timerId = timerId + 5;
+    // timerEl.innerHTML = timerId
+    time += 5;
+    timerEl.innerHTML = time
     sfxRight.play();
+    
   }
-
+  
   else {
-    timerId = timerId - 5;
-    timerEl.innerHTML = timerId;
+    // timerId = timerId - 5;
+    // timerEl.innerHTML = timerId;
+    time -= 5;
+    timerEl.innerHTML = time
     sfxWrong.play();
+    
   }
-
-
-  //disable button after clicking answer once
-  // document.querySelector("#choices button").disabled = true;
-  this.disabled = true;
-  // displayNextquestion();
-
   // move to next question
-  //function nextQuestion () {
+  
   currentQuestionIndex++
 
-  // check if we’ve run out of questions
+  // check if we’ve run out of questions. if yes, quiz end. else, move to next question
+
   if (currentQuestionIndex > questions.length - 1) {
     quizEnd();
   } else {
@@ -138,39 +108,18 @@ function checkAnswer() {
   }
 
 }
-// function displayNextBtn() {
-//   displayNextBtn.addEventListener("click", nextQuestion);
-//   displayNextBtn.classList.remove("hide");
-
-//   if (currentQuestion === questions.length) {
-//     console.log(currentQuestion);
-
-//     endQuiz();
-//   }
-//   else {
-//     getQuestion();
-//   }
-
-// check if we've run out of questions
-// quizEnd
-// else 
-// getQuestion
-
-
-
 
 function quizEnd() {
-
+  var finalScore = time
   // stop timer
   clearInterval(timerId);
   // show end screen
   endScreen.classList.remove("hide");
   // show final score
-
+  finalScore.innerHTML = time
   // hide questions section
   questionsEl.classList.add("hide");
 }
-
 
 
 function clockTick() {
@@ -181,9 +130,16 @@ function clockTick() {
 
 function saveHighscore() {
   // get value of input box
+  initialsEl = initialsEl.value;
 
   // make sure value wasn't empty
   // get saved scores from localstorage, or if not any, set to empty array
+  if (initialsEl === ""){
+    alert ("Please leave your initial");
+  }
+  else {
+
+  }
 
   // format new score object for current user
 
