@@ -1,6 +1,7 @@
 // variables to keep track of quiz state
 var currentQuestionIndex = 0;
 var time = questions.length * 15;
+// var time = 3;
 var timerId;
 
 
@@ -31,37 +32,52 @@ function startQuiz() {
   questionsEl.classList.remove("hide");
 
   // start timer
-  setTimer();
+  // setTimer();
+  timerId = setInterval(setTimer, 1000);
 
   // show starting time
+  timerEl.innerHTML = time;
   // displayTimer();
 
   getQuestion();
 }
 
 // make a timer
+// function setTimer() {
+//   timerEl.textContent = time;
+//   timerId = setInterval(function () {
+//     time--;
+//     timerEl.innerHTML = time;
+
+//     if (timerEl.innerHTML === 0) {
+//       myStopfunction(timerId);
+
+//       choicesEl.innerHTML = "";
+
+//       finalScore.innerHTML = time;
+
+//     }
+//   }, 1000);
+
+//   function myStopfunction(timerId) {
+//     clearInterval(timerId);
+
+//   }
+// }
+
+
+// make a timer
 function setTimer() {
-  timerEl.textContent = time;
-  timerId = setInterval(function () {
-    time--;
-    timerEl.innerHTML = time;
+  time--;
+  timerEl.innerHTML = time;
 
-    if (timerEl.innerHTML === 0) {
-      myStopfunction(timerId);
-
-      choicesEl.innerHTML = "";
-
-      finalScore.innerHTML = time;
-
-    }
-  }, 1000);
-
-  function myStopfunction(timerId) {
-    clearInterval(timerId);
-
+  if (time <= 0) {
+    quizEnd();
   }
-}
 
+
+
+}
 
 //display questions & for each question's choices make a button
 function getQuestion() {
@@ -96,37 +112,45 @@ function getQuestion() {
 
 // check if answer is correct
 function checkAnswer() {
-  var currentQuestion = questions[currentQuestionIndex];
-  if (this.innerHTML !== currentQuestion.answer) {
+  
+  if (this.innerHTML !== questions[currentQuestionIndex].answer) {
     // console.log('Wrong!!')
 
-    document.body.setAttribute("class", "wrong");
-    let finalScoreInt = parseInt(finalScore.innerHTML);
-    let currentTimerInt = parseInt(timerEl.innerHTML);
-    finalScoreInt -= currentTimerInt;
-    finalScore.innerHTML = finalScoreInt;
+    time -= 5;
+    if (time < 0) {
+      time = 0;
+    }
+
+    // display new time
+    timerEl.innerHTML = time;
+
+    // play "wrong" sfx
+    sfxWrong.play();
+    feedbackEl.innerHTML = "Wrong";
+
+    // document.body.setAttribute("class", "wrong");
+    // let finalScoreInt = parseInt(finalScore.innerHTML);
+    // let currentTimerInt = parseInt(timerEl.innerHTML);
+    // finalScoreInt -= currentTimerInt;
+    // finalScore.innerHTML = finalScoreInt;
 
   }
   else {
+    sfxRight.play();
+    feedbackEl.innerHTML = "Correct";
+    time ++;
 
-    document.body.setAttribute("class", "right");
-    myStopfunction(timerId);
-    let finalScoreInt = parseInt(finalScore.innerHTML);
-    finalScoreInt += currentTimerInt;
-    finalScore.innerHTML = finalScoreInt;
-    console.log('That is correct!')
+    // document.body.setAttribute("class", "right");
+    // myStopfunction(timerId);
+    // let finalScoreInt = parseInt(finalScore.innerHTML);
+    // finalScoreInt += currentTimerInt;
+    // finalScore.innerHTML = finalScoreInt;
+    // console.log('That is correct!')
 
     //disable button after clicking answer once
     this.disabled = true;
     displayNextBtn();
    
-
-    // penalize time
-    // display new time on page
-    // play "wrong" sound effect
-    // else 
-    // play "right" sound effect
-    // flash right/wrong feedback on page for half a second
     // move to next question
     function displayNextBtn() {
       displayNextBtn.addEventListener("click", nextQuestion);
@@ -154,7 +178,7 @@ function checkAnswer() {
 function quizEnd() {
 
   // stop timer
-
+  clearInterval(timerId);
   // show end screen
   endScreen.classList.remove ("hide");
   // show final score
