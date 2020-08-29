@@ -43,30 +43,6 @@ function startQuiz() {
 }
 
 // make a timer
-// function setTimer() {
-//   timerEl.textContent = time;
-//   timerId = setInterval(function () {
-//     time--;
-//     timerEl.innerHTML = time;
-
-//     if (timerEl.innerHTML === 0) {
-//       myStopfunction(timerId);
-
-//       choicesEl.innerHTML = "";
-
-//       finalScore.innerHTML = time;
-
-//     }
-//   }, 1000);
-
-//   function myStopfunction(timerId) {
-//     clearInterval(timerId);
-
-//   }
-// }
-
-
-// make a timer
 function setTimer() {
   time--;
   timerEl.innerHTML = time;
@@ -75,112 +51,120 @@ function setTimer() {
     quizEnd();
   }
 
+}
 
-
+function getQuestion() {
+  // get current question object from array
+  currentQuestion = questions[currentQuestionIndex];
+  // update title with current question
+  questionTitle.textContent = currentQuestion.title;
+  // clear out any old question choices
+  choicesEl.innerHTML = "";
+  // loop over choices
+  for (var i = 0; i < currentQuestion.choices.length; i++) {
+  // create new button for each choice
+  var choice = document.createElement("button");
+  choice.textContent = currentQuestion.choices[i];
+  // attach click event listener to each choice
+  choice.onlick = checkAnswer;
+  // display on the page
+  choicesEl.appendChild(choice);
+  }
 }
 
 //display questions & for each question's choices make a button
-function getQuestion() {
-  // get current question object from array
-  var currentQuestion = questions[currentQuestionIndex];
+// function getQuestion() {
+//   // get current question object from array
+//   var currentQuestion = questions[currentQuestionIndex];
 
-  // update title with current question
-  questionTitle.innerHTML = currentQuestion.title;
-
-
-  // empty containers/ any old question choices
-  choicesEl.innerHTML = "";
+//   // update title with current question
+//   questionTitle.innerHTML = currentQuestion.title;
 
 
-  // display answer choices & loop over choices
-  for (var i = 0; i < currentQuestion.choices.length; i++) {
-    // create new button for each choice (from instructor)
-    var newDiv = document.createElement("div");
-    document.body.appendChild(newDiv);
-    var newButton = document.createElement("button");
-    newButton.id = i;
-    newButton.innerHTML = +[i] + 1 + ": " + currentQuestion.choices[i];
-    newButton.className = "choices button";
-    // display on the page (from instructor)
-    document.body.appendChild(newButton);
-    newButton.onclick = checkAnswer;
-    // console.log(questions[currentQuestionIndex].answer);
+//   // empty containers/ any old question choices
+//   choicesEl.innerHTML = "";
+//   // currentQuestion[i-1].choices.classList.add("hide");
 
-  }
 
-}
+//   for (var i = 0; i < currentQuestion.choices.length; i++) {
+//     // create new button for each choice (from instructor)
+//     var newDiv = document.createElement("div");
+//     document.body.appendChild(newDiv);
+//     var newButton = document.createElement("button");
+//     newButton.id = i;
+//     newButton.innerHTML = questions[currentQuestionIndex].choices[i];
+//     newButton.className = "choices button";
+//     // display on the page (from instructor)
+//     document.body.appendChild(newButton);
+//     newButton.onclick = checkAnswer;
+//     // console.log(questions[currentQuestionIndex].answer);
+
+
+//   }
+
+// }
 
 // check if answer is correct
 function checkAnswer() {
-  
-  if (this.innerHTML !== questions[currentQuestionIndex].answer) {
-    // console.log('Wrong!!')
 
-    time -= 5;
-    if (time < 0) {
-      time = 0;
-    }
+  if (event.target.innerHTML === questions[currentQuestionIndex].answer) {
 
-    // display new time
-    timerEl.innerHTML = time;
-
-    // play "wrong" sfx
-    sfxWrong.play();
-    feedbackEl.innerHTML = "Wrong";
-
-    // document.body.setAttribute("class", "wrong");
-    // let finalScoreInt = parseInt(finalScore.innerHTML);
-    // let currentTimerInt = parseInt(timerEl.innerHTML);
-    // finalScoreInt -= currentTimerInt;
-    // finalScore.innerHTML = finalScoreInt;
-
-  }
-  else {
+    timerId = timerId + 5;
+    console.log(timerId)
     sfxRight.play();
-    feedbackEl.innerHTML = "Correct";
-    time ++;
-
-    // document.body.setAttribute("class", "right");
-    // myStopfunction(timerId);
-    // let finalScoreInt = parseInt(finalScore.innerHTML);
-    // finalScoreInt += currentTimerInt;
-    // finalScore.innerHTML = finalScoreInt;
-    // console.log('That is correct!')
-
-    //disable button after clicking answer once
-    this.disabled = true;
-    displayNextBtn();
-   
-    // move to next question
-    function displayNextBtn() {
-      displayNextBtn.addEventListener("click", nextQuestion);
-      displayNextBtn.classList.remove("hide");
-
-      if (currentQuestion === questions.length) {
-        console.log(currentQuestion);
-
-        endQuiz();
-      }
-      else {
-        getQuestion();
-      }
-
-    }
-
-    // check if we've run out of questions
-    // quizEnd
-    // else 
-    // getQuestion
-
   }
+
+  else {
+    timerId = timerId - 5;
+    timerEl.innerHTML = timerId;
+    sfxWrong.play();
+  }
+
+
+  //disable button after clicking answer once
+  // document.querySelector("#choices button").disabled = true;
+  this.disabled = true;
+  // displayNextquestion();
+
+  // move to next question
+  //function nextQuestion () {
+  currentQuestionIndex++
+
+  // check if we’ve run out of questions
+  if (currentQuestionIndex > questions.length - 1) {
+    quizEnd();
+  } else {
+    getQuestion();
+  }
+
 }
+// function displayNextBtn() {
+//   displayNextBtn.addEventListener("click", nextQuestion);
+//   displayNextBtn.classList.remove("hide");
+
+//   if (currentQuestion === questions.length) {
+//     console.log(currentQuestion);
+
+//     endQuiz();
+//   }
+//   else {
+//     getQuestion();
+//   }
+
+// check if we've run out of questions
+// quizEnd
+// else 
+// getQuestion
+
+
+
 
 function quizEnd() {
 
   // stop timer
   clearInterval(timerId);
   // show end screen
-  endScreen.classList.remove ("hide");
+  endScreen.classList.remove("hide");
   // show final score
 
   // hide questions section
