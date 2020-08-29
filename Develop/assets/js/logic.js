@@ -14,6 +14,9 @@ var initialsEl = document.getElementById("initials");
 var feedbackEl = document.getElementById("feedback");
 var startScreen = document.getElementById("start-screen");
 var finalScore = document.getElementById("final-score");
+var questionTitle = document.getElementById("question-title")
+var timerCount = document.querySelector("#timer");
+var endScreen = document.getElementById("end-screen")
 
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
@@ -25,7 +28,8 @@ function startQuiz() {
   // hide start screen
   startScreen.style.display = "none";
   // un-hide questions section
-  questionsEl.removeAttribute("hide");
+  questionsEl.classList.remove("hide");
+
   // start timer
   setTimer();
 
@@ -39,124 +43,127 @@ function startQuiz() {
 function setTimer() {
   timerEl.textContent = time;
   timerId = setInterval(function () {
-    time = time - 1;
+    time--;
     timerEl.innerHTML = time;
 
     if (timerEl.innerHTML === 0) {
       myStopfunction(timerId);
+
       choicesEl.innerHTML = "";
 
       finalScore.innerHTML = time;
-
-      // displayNextBtn();
 
     }
   }, 1000);
 
   function myStopfunction(timerId) {
     clearInterval(timerId);
+
   }
 }
+
 
 //display questions & for each question's choices make a button
 function getQuestion() {
   // get current question object from array
-  questionsEl.innerHTML = currentQuestionIndex
+  var currentQuestion = questions[currentQuestionIndex];
+
+  // update title with current question
+  questionTitle.innerHTML = currentQuestion.title;
+
 
   // empty containers/ any old question choices
-  questionsEl.innerHTML = "";
   choicesEl.innerHTML = "";
 
 
-  // update title with current question
-  let h2Question = document.createElement("h2");
-  h2Question.classList.add("question");
-  h2Question.innerHTML = questions[currentQuestionIndex].question;
-  questionsEl.appendChild(h2Question);
-  console.log(h2Question)
-
   // display answer choices & loop over choices
-  for (let i = 0; i < questions[currentQuestion].choices.length; i++) {
-    let h2Choices = document.createElement("button")
-    h2Choices.innerHTML = "";
-    h2Choices.classList.add("choices-btns");
-
-    h2Choices.innerHTML = questions[currentQuestionIndex].choices[i];
-    choiceCont.appendChild(h2Choices);
-    h2Choices.onclick = checkAnswer;
+  for (var i = 0; i < currentQuestion.choices.length; i++) {
+    // create new button for each choice (from instructor)
+    var newDiv = document.createElement("div");
+    document.body.appendChild(newDiv);
+    var newButton = document.createElement("button");
+    newButton.id = i;
+    newButton.innerHTML = +[i] + 1 + ": " + currentQuestion.choices[i];
+    newButton.className = "choices button";
+    // display on the page (from instructor)
+    document.body.appendChild(newButton);
+    newButton.onclick = checkAnswer;
+    // console.log(questions[currentQuestionIndex].answer);
 
   }
 
-// create new button for each choice
-// attach click event listener to each choice
-// display on the page
-
-
 }
-
-
-
-function displayNextBtn() {
-  displayNextBtn.addEventListener("click", nextQuestion);
-  displayNextBtn.classList.remove("hide");
-}
-
 
 // check if answer is correct
-function answerClick(event) {
-  // onclick and grab some value from button
+function checkAnswer() {
+  var currentQuestion = questions[currentQuestionIndex];
+  if (this.innerHTML !== currentQuestion.answer) {
+    // console.log('Wrong!!')
 
-  for (var i = 0; i < questionsEl.length; i++) {
-    var response = window.prompt(questionsEl[i].title)
-    if (response == questions[i].answer) {
-      score++;
-      alert("Correct!");
-    }
-    else {
-      score--;
-      alert("wrong!");
-    }
+    document.body.setAttribute("class", "wrong");
+    let finalScoreInt = parseInt(finalScore.innerHTML);
+    let currentTimerInt = parseInt(timerEl.innerHTML);
+    finalScoreInt -= currentTimerInt;
+    finalScore.innerHTML = finalScoreInt;
 
-  }
-
-  // penalize time
-
-  // display new time on page
-
-  // play "wrong" sound effect
-
-  // else 
-  // play "right" sound effect
-
-
-  // flash right/wrong feedback on page for half a second
-
-  // move to next question
-
-  // check if we've run out of questions
-  // quizEnd
-  // else 
-  // getQuestion
-  if (currentQuestion === questions.length) {
-    console.log(currentQuestion);
-
-    endQuiz();
   }
   else {
-    getQuestion();
-  }
 
+    document.body.setAttribute("class", "right");
+    myStopfunction(timerId);
+    let finalScoreInt = parseInt(finalScore.innerHTML);
+    finalScoreInt += currentTimerInt;
+    finalScore.innerHTML = finalScoreInt;
+    console.log('That is correct!')
+
+    //disable button after clicking answer once
+    this.disabled = true;
+    displayNextBtn();
+   
+
+    // penalize time
+    // display new time on page
+    // play "wrong" sound effect
+    // else 
+    // play "right" sound effect
+    // flash right/wrong feedback on page for half a second
+    // move to next question
+    function displayNextBtn() {
+      displayNextBtn.addEventListener("click", nextQuestion);
+      displayNextBtn.classList.remove("hide");
+
+      if (currentQuestion === questions.length) {
+        console.log(currentQuestion);
+
+        endQuiz();
+      }
+      else {
+        getQuestion();
+      }
+
+    }
+
+    // check if we've run out of questions
+    // quizEnd
+    // else 
+    // getQuestion
+
+  }
 }
 
 function quizEnd() {
+
   // stop timer
 
   // show end screen
-
+  endScreen.classList.remove ("hide");
   // show final score
 
   // hide questions section
+  questionsEl.classList.add("hide");
 }
+
+
 
 function clockTick() {
   // update time
@@ -190,10 +197,3 @@ startBtn.onclick = startQuiz;
 
 initialsEl.onkeyup = checkForEnter;
 
-// function nextQuestion() {
-//   ++currentQuestion;
-//   body.setAttribute("class", "default");
-//   setTimer();
-//   displayQuestion();
-//   displayNextBtn.setAttribute("class", "hide");
-// }
