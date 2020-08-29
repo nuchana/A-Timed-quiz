@@ -62,14 +62,14 @@ function getQuestion() {
   choicesEl.innerHTML = "";
   // loop over choices
   for (var i = 0; i < currentQuestion.choices.length; i++) {
-  // create new button for each choice
-  var choice = document.createElement("button");
-  choice.textContent = currentQuestion.choices[i];
-  // attach click event listener to each choice
-  choices.onlick = checkAnswer;
-  // console.log(choice);
-  // display on the page
-  choicesEl.appendChild(choice);
+    // create new button for each choice
+    var choice = document.createElement("button");
+    choice.textContent = currentQuestion.choices[i];
+    // attach click event listener to each choice
+    choices.onlick = checkAnswer;
+    // console.log(choice);
+    // display on the page
+    choicesEl.appendChild(choice);
   }
 }
 
@@ -84,19 +84,19 @@ function checkAnswer() {
     time += 5;
     timerEl.innerHTML = time
     sfxRight.play();
-    
+
   }
-  
+
   else {
     // timerId = timerId - 5;
     // timerEl.innerHTML = timerId;
     time -= 5;
     timerEl.innerHTML = time
     sfxWrong.play();
-    
+
   }
   // move to next question
-  
+
   currentQuestionIndex++
 
   // check if we’ve run out of questions. if yes, quiz end. else, move to next question
@@ -110,7 +110,7 @@ function checkAnswer() {
 }
 
 function quizEnd() {
-  var finalScore = time
+
   // stop timer
   clearInterval(timerId);
   // show end screen
@@ -134,10 +134,12 @@ function saveHighscore() {
 
   // make sure value wasn't empty
   // get saved scores from localstorage, or if not any, set to empty array
-  if (initialsEl === ""){
-    alert ("Please leave your initial");
+  if (initialsEl === "") {
+    alert("Please leave your initial");
   }
   else {
+    var saveHighscore = JSON.parse(window.localStorage.getItem("highScores")) || [];
+    localStorage.setItem("Initials", initialsEl);
 
   }
 
