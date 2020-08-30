@@ -140,7 +140,7 @@ function saveHighscore() {
   console.log(finalScore)
   localStorage.setItem("mostRecentScore", time);
   initialsEl = initialsEl.value;
-  finalScore.textContent = timerEl.textContent
+  finalScore.textContent = timerEl.textContent;
 
   // make sure value wasn't empty
   // get saved scores from localstorage, or if not any, set to empty array

@@ -1,9 +1,13 @@
 function printHighscores() {
   // either get scores from localstorage or set to empty array
+  
   var highScore = localStorage.getItem('mostRecentScore');
+  var initials = localStorage.getItem('initials');
+
   console.log ("mostRecentScore", highScore);
   // display on page
-  highScore.innerHTML = mostRecentScore
+  document.getElementById("highscores").textContent = highScore;
+ 
  
   // (optional) sort highscores by score property in descending order
 
@@ -14,7 +18,13 @@ function printHighscores() {
 }
 
 printHighscores();
+
+var clear = document.getElementById("clear");
+clear.addEventListener("click", clearHighscores);
 function clearHighscores() {
+
+  document.getElementById("highscores").textContent = "";
+
   // (and reload)
 }
 
