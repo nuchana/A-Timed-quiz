@@ -15,9 +15,13 @@ var initialsEl = document.getElementById("initials");
 var feedbackEl = document.getElementById("feedback");
 var startScreen = document.getElementById("start-screen");
 var finalScore = document.getElementById("final-score");
-var questionTitle = document.getElementById("question-title")
+var questionTitle = document.getElementById("question-title");
 var timerCount = document.querySelector("#timer");
-var endScreen = document.getElementById("end-screen")
+var endScreen = document.getElementById("end-screen");
+var username = document.getElementById("initials");
+var mostRecentScore = localStorage.getItem('mostRecentScore');
+finalScore.innerText = mostRecentScore
+
 
 // sound effects
 var sfxRight = new Audio("assets/sfx/correct.wav");
@@ -117,6 +121,8 @@ function quizEnd() {
   endScreen.classList.remove("hide");
   // show final score
   finalScore.innerHTML = time
+  localStorage.setItem("mostRecentScore", finalScore);
+
   // hide questions section
   questionsEl.classList.add("hide");
 }
@@ -140,6 +146,7 @@ function saveHighscore() {
   else {
     var saveHighscore = JSON.parse(window.localStorage.getItem("highScores")) || [];
     localStorage.setItem("Initials", initialsEl);
+    //localStorage.setItem("finalScore", finalScore);
 
   }
 
@@ -151,6 +158,7 @@ function saveHighscore() {
 }
 
 function checkForEnter(event) {
+
   // check if event key is enter
   // saveHighscore
 }
@@ -162,4 +170,5 @@ submitBtn.onclick = saveHighscore;
 startBtn.onclick = startQuiz;
 
 initialsEl.onkeyup = checkForEnter;
+
 
