@@ -24,8 +24,8 @@ finalScore.innerText = mostRecentScore
 
 
 // sound effects
-var sfxRight = new Audio("assets/sfx/correct.wav");
-var sfxWrong = new Audio("assets/sfx/incorrect.wav");
+var sfxRight = new Audio("sfx/correct.wav");
+var sfxWrong = new Audio("sfx/incorrect.wav");
 
 
 
@@ -122,7 +122,7 @@ function quizEnd() {
   // show final score
   finalScore.innerHTML = time
   localStorage.setItem("mostRecentScore", finalScore);
-  
+
   // hide questions section
   questionsEl.classList.add("hide");
 }
@@ -130,14 +130,14 @@ function quizEnd() {
 
 function clockTick() {
   // update time
- 
+
   // check if user ran out of time
 }
 
 function saveHighscore() {
   // get value of input box
   var time = finalScore.textContent
-  console.log(finalScore)
+  // console.log(finalScore)
   localStorage.setItem("mostRecentScore", time);
   initialsEl = initialsEl.value;
   finalScore.textContent = timerEl.textContent;
